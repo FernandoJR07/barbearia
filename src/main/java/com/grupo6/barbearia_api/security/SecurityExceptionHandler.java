@@ -26,7 +26,6 @@ public class SecurityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGeneralException(Exception ex) {
-        // Se for erro de autenticação (401), personalizamos a resposta
         if (ex.getMessage() != null && (ex.getMessage().contains("Unauthorized") || ex.getMessage().contains("Full authentication is required"))) {
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("timestamp", LocalDateTime.now());
@@ -35,8 +34,6 @@ public class SecurityExceptionHandler {
             body.put("message", "Token ausente, expirado ou inválido.");
             return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
         }
-
-        // Para outros erros, mantemos a exceção original para não esconder bugs
         throw new RuntimeException(ex);
     }
 }
