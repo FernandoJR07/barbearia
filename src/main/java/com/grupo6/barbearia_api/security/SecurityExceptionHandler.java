@@ -24,10 +24,8 @@ public class SecurityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
-    // Caso queira tratar erros genéricos de autenticação (401)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleGeneralException(Exception ex) {
-        // Log do erro seria ideal aqui
         if (ex.getMessage().contains("Unauthorized") || ex.getMessage().contains("Full authentication is required")) {
             Map<String, Object> body = new LinkedHashMap<>();
             body.put("timestamp", LocalDateTime.now());
@@ -36,7 +34,6 @@ public class SecurityExceptionHandler {
             body.put("message", "Token ausente ou inválido.");
             return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
         }
-        // Deixa outros erros passarem para os handlers padrão
         throw new RuntimeException(ex);
     }
 }
